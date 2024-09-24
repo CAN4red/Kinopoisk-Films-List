@@ -1,1 +1,1 @@
-№ Simple list app for viewing Top movies Kinopoisk
+# Simple list app with Top movies from Kinopoisk
