@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -157,7 +158,7 @@ fun FilmCard(film: Film, modifier: Modifier = Modifier) {
                     text = "$mainGenre ($year)",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight(700),
-                    color = Color.Black.copy(alpha = 0.5f),
+                    color = LocalContentColor.current.copy(alpha = 0.6f),
                     modifier = Modifier.padding(2.dp),
                 )
             }

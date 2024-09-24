@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -82,8 +83,8 @@ fun FilmDetails(
             Text(
                 text = filmDetails.description,
                 style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight(700),
-                color = Color.Black.copy(alpha = 0.6f),
+                fontWeight = FontWeight(500),
+                color = LocalContentColor.current.copy(alpha = 0.6f),
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(bottom = 16.dp),
