@@ -9,8 +9,8 @@ data class FilmDetails(
     @SerialName("nameRu") val name: String,
     val posterUrl: String,
     @SerialName("ratingKinopoisk") val rating: Double?,
-    val year: Int,
-    val description: String,
+    val year: Int?,
+    val description: String?,
     val countries: List<Country>,
     val genres: List<Genre>,
 )

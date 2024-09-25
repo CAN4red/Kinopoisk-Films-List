@@ -2,16 +2,21 @@ package com.example.fintechlab2023.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -31,20 +36,33 @@ fun FilmDetailsScreen(
     retryAction: () -> Unit,
     moreDetailsAction: () -> Unit,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
+    backAction: () -> Unit,
 ) {
-    when (filmDetailsUiState) {
-        is FilmDetailsUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-        is FilmDetailsUiState.Error -> ErrorScreen(
-            retryAction = retryAction,
-            modifier = modifier.fillMaxSize()
-        )
+    Box(modifier = modifier.fillMaxSize()) {
+        when (filmDetailsUiState) {
+            is FilmDetailsUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
+            is FilmDetailsUiState.Error -> ErrorScreen(
+                retryAction = retryAction,
+                modifier = modifier.fillMaxSize()
+            )
 
-        is FilmDetailsUiState.Success -> FilmDetails(
-            filmDetails = filmDetailsUiState.filmDetails,
-            moreDetailsAction = moreDetailsAction,
-            modifier = modifier.fillMaxSize()
-        )
+            is FilmDetailsUiState.Success -> FilmDetails(
+                filmDetails = filmDetailsUiState.filmDetails,
+                moreDetailsAction = moreDetailsAction,
+                modifier = modifier.fillMaxSize()
+            )
+        }
+
+        IconButton(
+            onClick = backAction,
+            modifier = Modifier.align(Alignment.TopStart)
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back Button",
+                tint = Color.Gray.copy(alpha = 0.8f)
+            )
+        }
     }
 }
 
@@ -80,15 +98,17 @@ fun FilmDetails(
                 modifier = Modifier.padding(bottom = 16.dp),
             )
 
-            Text(
-                text = filmDetails.description,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight(500),
-                color = LocalContentColor.current.copy(alpha = 0.6f),
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(bottom = 16.dp),
-            )
+            filmDetails.description?.let { description ->
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight(500),
+                    color = LocalContentColor.current.copy(alpha = 0.6f),
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(bottom = 16.dp),
+                )
+            }
 
             ClickableText(
                 text = "Все детали о фильме",

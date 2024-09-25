@@ -1,6 +1,7 @@
 package com.example.fintechlab2023
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -25,7 +26,9 @@ fun FilmsApp(
 ) {
     Scaffold() { innerPadding ->
         Surface(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
         ) {
             val appContainer = DefaultAppContainer()
             val filmViewModel by remember {
@@ -48,20 +51,21 @@ fun FilmsApp(
                             filmViewModel.choseFilm(filmId)
                             navController.navigate(AppScreen.FilmDetails.name)
                         },
-                        contentPadding = innerPadding,
                     )
                 }
                 composable(route = AppScreen.FilmDetails.name) {
                     FilmDetailsScreen(
                         filmDetailsUiState = filmViewModel.filmDetailsUiState,
                         retryAction = filmViewModel::getFilmDetails,
-                        moreDetailsAction = { navController.navigate(AppScreen.ExpandedFilmDetails.name) }
+                        moreDetailsAction = { navController.navigate(AppScreen.ExpandedFilmDetails.name) },
+                        backAction = { navController.navigateUp() }
                     )
                 }
                 composable(route = AppScreen.ExpandedFilmDetails.name) {
                     ExpandedFilmDetailsScreen(
                         filmDetailsUiState = filmViewModel.filmDetailsUiState,
-                        retryAction = filmViewModel::getFilmDetails
+                        retryAction = filmViewModel::getFilmDetails,
+                        backAction = {navController.navigateUp()}
                     )
                 }
             }

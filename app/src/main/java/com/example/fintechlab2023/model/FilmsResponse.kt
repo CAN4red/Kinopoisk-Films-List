@@ -15,7 +15,7 @@ data class Film(
     val id: Int,
     @SerialName(value = "nameRu")
     val name: String,
-    val year: String,
+    val year: String?,
     val filmLength: String?,
     val countries: List<Country>,
     val genres: List<Genre>,
