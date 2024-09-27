@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.fintechlab2023.data.FilmsRepository
 import com.example.fintechlab2023.model.Film
 import com.example.fintechlab2023.model.FilmDetails
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -28,11 +30,14 @@ class FilmViewModel(
     private val filmsRepository: FilmsRepository,
 ) : ViewModel() {
 
-    var listUiState: ListUiState by mutableStateOf(ListUiState.Loading)
-        private set
+    private var _listUiState = MutableStateFlow<ListUiState>(ListUiState.Loading)
+    val listUiState: StateFlow<ListUiState>
+        get() = _listUiState
 
-    var filmDetailsUiState: FilmDetailsUiState by mutableStateOf(FilmDetailsUiState.Loading)
-        private set
+    private var _filmDetailsUiState =
+        MutableStateFlow<FilmDetailsUiState>(FilmDetailsUiState.Loading)
+    val filmDetailsUiState: StateFlow<FilmDetailsUiState>
+        get() = _filmDetailsUiState
 
     private var chosenFilmId: Int? by mutableStateOf(null)
 
@@ -42,32 +47,38 @@ class FilmViewModel(
 
     fun getFilms() {
         viewModelScope.launch {
-            listUiState = ListUiState.Loading
-            listUiState = try {
-                ListUiState.Success(filmsRepository.getFilms())
-            } catch (e: IOException) {
-                ListUiState.Error
-            } catch (e: HttpException) {
-                ListUiState.Error
-            }
+            _listUiState.emit(ListUiState.Loading)
+            _listUiState.emit(
+                try {
+                    ListUiState.Success(filmsRepository.getFilms())
+                } catch (e: IOException) {
+                    ListUiState.Error
+                } catch (e: HttpException) {
+                    ListUiState.Error
+                }
+            )
         }
     }
 
-    fun choseFilm(id: Int) {
+    fun chooseFilm(id: Int) {
         chosenFilmId = id
         getFilmDetails()
     }
 
     fun getFilmDetails() {
         viewModelScope.launch {
-            filmDetailsUiState = FilmDetailsUiState.Loading
-            filmDetailsUiState = try {
-                FilmDetailsUiState.Success(filmsRepository.getFilmDetails(chosenFilmId ?: 0))
-            } catch (e: IOException) {
-                FilmDetailsUiState.Error
-            } catch (e: HttpException) {
-                FilmDetailsUiState.Error
-            }
+            _filmDetailsUiState.emit(FilmDetailsUiState.Loading)
+            _filmDetailsUiState.emit(
+                try {
+                    FilmDetailsUiState.Success(
+                        filmsRepository.getFilmDetails(chosenFilmId ?: 0)
+                    )
+                } catch (e: IOException) {
+                    FilmDetailsUiState.Error
+                } catch (e: HttpException) {
+                    FilmDetailsUiState.Error
+                }
+            )
         }
     }
 }
