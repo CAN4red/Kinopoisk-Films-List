@@ -4,7 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.fintechlab2023.FilmsApplication
 import com.example.fintechlab2023.data.FilmsRepository
 import com.example.fintechlab2023.model.Film
 import com.example.fintechlab2023.model.FilmDetails
@@ -79,6 +84,16 @@ class FilmViewModel(
                     FilmDetailsUiState.Error
                 }
             )
+        }
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[APPLICATION_KEY] as FilmsApplication)
+                val filmsRepository = application.container.filmsRepository
+                FilmViewModel(filmsRepository = filmsRepository)
+            }
         }
     }
 }
