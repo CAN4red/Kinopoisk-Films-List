@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -24,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -87,12 +90,29 @@ fun ErrorScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.error_img),
-            contentDescription = ""
+            painter = painterResource(id = R.drawable.ic_connection_error),
+            contentDescription = "",
+            modifier = Modifier.size(200.dp)
         )
-        Text(text = "Failed to Load", modifier = Modifier.padding(16.dp))
+        Text(
+            text = "Failed to Load",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight(700),
+            color = LocalContentColor.current.copy(alpha = 0.5f),
+            modifier = Modifier.padding(16.dp)
+        )
 
-        Button(onClick = retryAction) { Text(text = "Retry") }
+        Button(
+            onClick = retryAction,
+            colors = ButtonDefaults.filledTonalButtonColors(),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Text(
+                text = "Retry",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight(700),
+            )
+        }
     }
 }
 
@@ -108,15 +128,16 @@ fun FilmsColumnScreen(
         contentPadding = contentPadding
     ) {
         items(items = films, key = { film -> film.id }) { film ->
-            FilmCard(
-                film = film,
+
+            // Box is needed for correct clicking indication in rounded corners
+            Box(
                 modifier = modifier
-                    .padding(
-                        horizontal = 20.dp,
-                        vertical = 8.dp
-                    )
-                    .clickable(onClick = { onCardClick(film.id) })
-            )
+                    .padding(horizontal = 20.dp, vertical = 8.dp)
+                    .clip(CardDefaults.shape)
+                    .clickable { onCardClick(film.id) }
+            ) {
+                FilmCard(film = film)
+            }
         }
     }
 }
@@ -179,13 +200,22 @@ fun LoadingScreenPreview() {
 
 @Composable
 @Preview
+fun ErrorScreenPreview() {
+    ErrorScreen(
+        retryAction = {},
+        modifier = Modifier.fillMaxSize()
+    )
+}
+
+
+@Composable
+@Preview
 fun FilmCardPreview() {
     FilmCard(
         film = previewFilm,
         modifier = Modifier
             .padding(4.dp)
             .fillMaxWidth()
-            .aspectRatio(1.5f)
     )
 }
 
