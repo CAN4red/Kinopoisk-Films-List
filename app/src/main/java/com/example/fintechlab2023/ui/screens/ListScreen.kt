@@ -3,6 +3,7 @@ package com.example.fintechlab2023.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -62,11 +64,16 @@ fun ListScreen(
 
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
-    Image(
-        modifier = modifier.size(200.dp),
-        painter = painterResource(id = R.drawable.loading_img),
-        contentDescription = "Loading"
-    )
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center,
+    ) {
+        CircularProgressIndicator(
+            color = LocalContentColor.current,
+            strokeWidth = 8.dp,
+            modifier = Modifier.size(100.dp)
+        )
+    }
 }
 
 @Composable
@@ -162,6 +169,12 @@ fun FilmCard(film: Film, modifier: Modifier = Modifier) {
             }
         }
     }
+}
+
+@Composable
+@Preview
+fun LoadingScreenPreview() {
+    LoadingScreen(modifier = Modifier.fillMaxSize())
 }
 
 @Composable
