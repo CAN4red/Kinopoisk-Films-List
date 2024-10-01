@@ -94,4 +94,8 @@ dependencies {
     // Navigation
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+
+    // Adapting for different screen sizes
+    // noinspection UseTomlInstead
+    implementation("androidx.compose.material3:material3-window-size-class")
 }

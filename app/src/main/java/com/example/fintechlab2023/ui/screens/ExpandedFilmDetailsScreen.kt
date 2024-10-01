@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -63,12 +65,15 @@ fun ExpandedFilmDetails(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(
-            top = 10.dp,
-            bottom = 20.dp,
-            start = 32.dp,
-            end = 32.dp
-        )
+        modifier = modifier
+            .padding(
+                top = 10.dp,
+                bottom = 20.dp,
+                start = 32.dp,
+                end = 32.dp
+            )
+            .verticalScroll(rememberScrollState())
+
     ) {
         val description = filmDetails.description
         val genres = filmDetails.genres.joinToString(separator = ", ") { it.genre }
@@ -122,7 +127,7 @@ fun ExpandedFilmDetailsPreview() {
     ExpandedFilmDetails(filmDetails = filmDetails)
 }
 
-val filmDetails = FilmDetails(
+private val filmDetails = FilmDetails(
     id = 1,
     name = "Битлджус Битлджус",
     posterUrl = "https://kinopoiskapiunofficial.tech/images/posters/kp/623807.jpg",

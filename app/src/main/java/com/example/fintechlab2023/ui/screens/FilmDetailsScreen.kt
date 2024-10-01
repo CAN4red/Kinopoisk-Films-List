@@ -1,12 +1,21 @@
 package com.example.fintechlab2023.ui.screens
 
+import android.content.Context
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -19,16 +28,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.fintechlab2023.R
+import com.example.fintechlab2023.model.Country
 import com.example.fintechlab2023.model.FilmDetails
+import com.example.fintechlab2023.model.Genre
 
 @Composable
 fun FilmDetailsScreen(
@@ -73,7 +88,11 @@ fun FilmDetails(
     moreDetailsAction: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
+            .fillMaxWidth()
+    ) {
         AsyncImage(
             model = ImageRequest
                 .Builder(context = LocalContext.current)
@@ -82,7 +101,9 @@ fun FilmDetails(
             contentDescription = "Film Description",
             error = painterResource(R.drawable.error_img),
             placeholder = painterResource(R.drawable.loading_img),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(max = LocalConfiguration.current.screenHeightDp.dp)
         )
 
         Column(
@@ -138,3 +159,26 @@ private fun ClickableText(
             )
     )
 }
+
+@Composable
+@Preview
+fun FilmDetailsPreview() {
+    FilmDetails(filmDetails = filmDetails,
+        moreDetailsAction = {})
+}
+
+private val filmDetails = FilmDetails(
+    id = 1,
+    name = "Битлджус Битлджус",
+    posterUrl = "https://kinopoiskapiunofficial.tech/images/posters/kp/623807.jpg",
+    rating = 7.1,
+    year = 2024,
+    description = "После смерти отца Лидия со своей дочерью Астрид и мачехой Делией " +
+            "возвращаются в старый дом в городке Уинтер-Ривер. Когда Астрид обнаруживает " +
+            "на чердаке тот самый макет города, Лидии приходится рассказать ей о Битлджусе " +
+            "— озорном и крайне неприятном призраке, чье имя ни в коем случае нельзя " +
+            "называть три раза. Но любопытство девочки берет верх — она открывает портал " +
+            "в загробную жизнь. Битлджус начинает снова терроризировать всех живых.",
+    countries = listOf(Country("США")),
+    genres = listOf(Genre("фэнтези"), Genre("комедия"))
+)
