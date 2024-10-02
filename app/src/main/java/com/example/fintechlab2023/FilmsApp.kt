@@ -1,14 +1,17 @@
 package com.example.fintechlab2023
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -17,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.fintechlab2023.ui.screens.FilmViewModel
 import com.example.fintechlab2023.data.navigation.AppScreen
+import com.example.fintechlab2023.ui.screens.EmptyScreen
 import com.example.fintechlab2023.ui.screens.ExpandedFilmDetailsScreen
 import com.example.fintechlab2023.ui.screens.FilmDetailsScreen
 import com.example.fintechlab2023.ui.screens.ListScreen
@@ -96,7 +100,9 @@ fun MediumWindowLayout(
     navController: NavHostController,
     filmViewModel: FilmViewModel
 ) {
-    Row {
+    Row(
+        modifier = Modifier.fillMaxSize()
+    ) {
         ListScreen(
             listUiState = filmViewModel.listUiState.collectAsStateWithLifecycle().value,
             retryAction = filmViewModel::getFilms,
@@ -114,17 +120,12 @@ fun MediumWindowLayout(
         NavHost(
             navController = navController,
             startDestination = AppScreen.FilmsList.name,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .widthIn(max = (0.5 * LocalConfiguration.current.screenWidthDp).dp)
+                .fillMaxHeight()
         ) {
             composable(route = AppScreen.FilmsList.name) {
-                ListScreen(
-                    listUiState = filmViewModel.listUiState.collectAsStateWithLifecycle().value,
-                    retryAction = filmViewModel::getFilms,
-                    onCardClick = { filmId ->
-                        filmViewModel.chooseFilm(filmId)
-                        navController.navigate(AppScreen.FilmDetails.name)
-                    },
-                )
+                EmptyScreen()
             }
             composable(route = AppScreen.FilmDetails.name) {
                 FilmDetailsScreen(
